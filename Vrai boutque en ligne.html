@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style1.css">
+    <title>Document</title>
+</head>
+<header>
+    <div class="logo">
+        <h1> Elégance et plus</h1>
+        <marquee style="color: rgb(232, 10, 10);"> bienvenue sur le site de Elegance et plus </marquee>
+        <p>Mode et accessoires de qualité</p>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#">Accueil</a></li>
+            <li><a href="#">Produits</a></li>
+            <li><a href="#">Nouveautés</a></li>
+            <li><a href="#">Contacts</a></li>
+        </ul>
+    </nav>
+    <div class="panier">
+        <img src="djh/ed.svg" alt=".." class="icon">
+        <span id="panier-count">0</span>
+        <p style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif; font-size: small; color: black;">Votre panier ici</p>
+    </div>
+</header>
+<body>
+    <section class="nouveaute">
+        <div>
+            <h1>Collection Saison 2025</h1>
+            <p>Découvrez nos nouvelles arrivées</p>
+            <button class="btn">Explorer</button>
+        </div>
+    </section>
+    <section>
+        <h2>Nos categories</h2>
+        <div class="categorie">
+            <div class="categorie-item" onclick="filtrage('Tous')">
+                <img src="icon.svg" alt="Tous" class="icon">
+                <p>Tous</p>
+            </div>
+            <div class="categorie-item" onclick="filtrage('Vetements')" >
+                <img src="icon.svg" alt="Vetements" class="icon">
+                <p>Vetement</p>
+            </div>
+            <div class="categorie-item" onclick="filtrage('Chaussures')">
+                <img src="icon.svg" alt="Chaussures" class="icon">
+                <p>Chaussures</p>
+            </div>
+            <div class="categorie-item" onclick="filtrage('Accessoires')">
+                <img src="icon.svg" alt="Accesoires" class="icon">
+                <p>Accessoires</p>
+            </div>
+        </div>
+    </section>
+    <section class="produit">
+        <h2>Tous Nos Produits</h2>
+        <div class="barre-de-filtre">
+            <select name="dela" id="tri-select" onchange="triage()" >
+                <option value="defaut">Trier par </option>
+                <option value="prix-croissant">Prix-croissant</option>
+                <option value="prix-decroissant">Prix-decroissant</option>
+                <option value="nom">Par nom</option>
+            </select>
+        </div>
+        <div class="liste-produit" id="produit-list">
+            <!--La liste des produits sera genere par javascript-->
+        </div>
+    </section>
+    <section class="newsletter">
+        <h1>Newsletter</h1>
+        <p>Abonnez vous pour recevoir nos offres exclusives</p>
+        <form action="">
+            <input type="email" placeholder="Votre email" required>
+            <button type="submit" class="btn">S'abonner</button>
+        </form>
+    </section>
+    <footer>
+        <div class="footer">
+            <div class="footer-item">
+                <h3>A Propos</h3>
+                <p>Votre boutique en ligne depuis 2020</p>
+
+            </div>
+            <div class="footer-item">
+                <h3>Contact</h3>
+                <p>123 Nouvelle route bastos, Yaounde </p>
+                <p>contact@elegance.com </p>
+                </p>01 23 45 67 89 </p>
+                
+            </div>
+            <div class="footer-item">
+                <h3>Reseaux sociaux</h3>
+            </div>
+        </div>
+    </footer>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <img id="modal-image" class="modal-image" src="" alt="">
+            <div class="modal-product-description">
+                <span class="close-modal">&times;</span>
+                <h2 id="modal-nom"></h2>
+                <p class="price" id="modal-price"></p>
+                <p class="description" id="modal-description"></p>
+                <div class="quantity-selector">
+                    <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                    <span id="product-quantity">1</span>
+                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                </div>
+                <button class="btn" onclick="ajouterAuPanierModal()">Ajouter au panier</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    
+// données des produits
+const produit=[
+    {
+        id:1,
+        nom:"Robe d'été fleurie",
+        categorie:"Vetements",
+        description:"Robe legere en coton avec motif floral, parfaite pour les journées ensoleillées. Matiere respirante er confortable pour toutes vis activités estivales.",
+        prix:6500,
+        image:"2.jpg",
+    },
+    {
+        id:2,
+        nom:"Chaussures en cuir",
+        categorie:"Chaussures",
+        description:"Chaussures élégantes en cuir veritable, confortable pour toutes la journée. Semelle souple et antiderapante pour un maintien optimal.",
+        prix:8500,
+        image:"7.jpg",
+    },
+    {
+        id:3,
+        nom:"Sac main en cuir",
+        categorie:"Accessoires",
+        description:"sac a main spacieux avec compartiment multiples, ideal pour le quotidien. cuir resistant et finitions soigne pour un style intemporel.",
+        prix:15000,
+        image:"3.jpg",
+    },
+    {
+        id:4,
+        nom:"Pull en laine merinos",
+        categorie:"Vetements",
+        description:"Pull chaud en laine merinos de haute qualite, disponible en plusieurs coloris. Matieres douce et thermoregulatrice.",
+        prix:4000,
+        image:"4.jpg",
+    },
+    {
+        id:5,
+        nom:"Baskets urbaines ",
+        categorie:"Chaussures",
+        description:"Basket tendace avec semelles amortissantes pour un confort optimal. Style moderne qui s'adapte a toutes vos tenues.",
+        prix:9500,
+        image:"10.jpg",
+    },
+    {
+        id:6,
+        nom:"Montre élégante",
+        categorie:"Accessoires",
+        description:"Montre-bracelet avec cadran minimaliste et bracelets en cuir. Mouvement suisse preciset etanche jusqu'a 50m",
+        prix:25000,
+        image:"9.jpg",
+    },
+    {
+        id:7,
+        nom:"Maillot Inter-Miami",
+        categorie:"Vetements",
+        description:"Decouvrez nos maillots unique fais avec des styles intemporels. Ideal pour pouvoir supporter son equipe sous une bonne vibe",
+        prix:6500,
+        image:"6.jpg",
+    },
+    {
+        id:8,
+        nom:"Talons de luxe",
+        categorie:"Chaussures",
+        description:"Des talons de luxe pour faire sensations. Ideale pour etre swag lors des sorties et des pichniques romantiques",
+        prix:12000,
+        image:"5.jpg",
+    }
+];
+//variable globale
+let panier=[];
+let produitActuel=null;
+
+//initialisation
+document.addEventListener('DOMContentLoaded', function(){
+    afficherProduit(produit);
+    setupEventListeners();
+});
+
+//affichage des produits
+
+function afficherProduit(produitsAAfficher){
+    const produitList=document.getElementById('produit-list');
+    produitList.innerHTML='';
+
+    produitsAAfficher.forEach(produit => {
+        produitCard=document.createElement('div');
+        produitCard.className="produit-card";
+        produitCard.innerHTML=`
+        <div class="cadre-image">
+            <img src="${produit.image}" alt="${produit.nom}" class="produit-image">
+        </div>
+        <div class="produit-infos">
+            <h3>${produit.nom}</h3>
+            <p>${produit.description.substring(0,60)}...</p>
+            <span >${produit.prix.toFixed(2)} Fcfa</span>
+            <button class="btn" onclick="afficherDetails(${produit.id})"> Voir détails</button>
+        </div>
+      `;
+      produitList.appendChild(produitCard);
+    });
+};
+
+//filtrage des produits
+
+function filtrage(categorie){
+    if (categorie === "Tous") {
+        afficherProduit(produit);
+    } else {
+        const produitsFiltres = produit.filter(produit => produit.categorie === categorie);
+        afficherProduit(produitsFiltres);
+    }
+}
+
+//triage des produits
+function  triage(){
+    let valeurTri = document.getElementById('tri-select').value
+    const produitsTries = [...produit]
+
+    switch(valeurTri){
+        case 'prix-croissant':
+            produitsTries.sort((a, b) => a.prix - b.prix);
+            break;
+        case 'prix-decroissant' : 
+            produitsTries.sort((a, b) => b.prix - a.prix);
+            break;
+        case 'nom' :
+            produitsTries.sort((a, b) => a.nom.localeCompare(b.nom));
+            break;
+        default : 
+            break;
+    }
+    afficherProduit(produitsTries);
+}
+
+//afficher le modal
+function afficherDetails(id){
+    produitActuel = produit.find(produitmodal => produitmodal.id === id);
+    const modal = document.getElementById('modal');
+
+    document.getElementById('modal-image').src = produitActuel.image;
+    document.getElementById('modal-nom').textContent = produitActuel.nom;
+    document.getElementById('modal-price').textContent = `${produitActuel.prix} FCFA`;
+    document.getElementById('modal-description').textContent = produitActuel.description;
+    document.getElementById('product-quantity').textContent = '1';
+    modal.style.display = 'block'; 
+}
+
+//changer la quantite
+function changeQuantity(change){
+    const quantityElement = document.getElementById('product-quantity');
+    let quantity = parseInt(quantityElement.textContent);
+
+    quantity += change;
+    if (quantity < 1) quantity = 1;
+    if (quantity >= 10) quantity = 10;
+    
+    quantityElement.textContent = quantity;
+}
+
+//mettre au panier depuis le modal
+function ajouterAuPanierModal(){
+    const quantity = parseInt(document.getElementById('product-quantity').textContent);
+    ajouterAuPanier(produitActuel.id , quantity);
+    fermerModal();
+}
+
+//ajouter au panier
+function ajouterAuPanier(id, quantity){
+    const produitPourpanier = produit.find( p => p.id === id);
+    const produitDansPanier = panier.find(item => item.id === id);
+    if (produitDansPanier) {
+       produitDansPanier.quantity += quantity; 
+    } else{
+        panier.push({
+            id : produitPourpanier.id,
+            nom : produitPourpanier.nom,
+            categorie : produitPourpanier.categorie,
+            image : produitPourpanier.image,
+            prix : produitPourpanier.prix,
+            quantity : quantity
+        });
+    }
+
+    mettreAJourPanier();
+    afficherNotification(`${quantity}  ${produitPourpanier.nom} ajoute(s) dans le panier`);
+}
+
+//mettre le panier a jour
+function mettreAJourPanier(){
+    const paniercount  = document.getElementById('panier-count');
+    const totalItems = panier.reduce((total, item) => total + item.quantity, 0);
+    paniercount.textContent = totalItems;
+}
+
+// Notification. Pour le setimeout, il faut prendre en compte que dans les 3000millisecondes d'apparition de la notification,
+//  les 500millisecondes de disparition de la notif sont inclus
+function afficherNotification(message){
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.classList.add('fade-out');
+        setTimeout(() => notification.remove(), 500);
+    }, 3000);
+}
+
+//fermer le modal
+function fermerModal(){
+    document.getElementById('modal').style.display = 'none';
+}
+
+//ecouteurs d'evenements
+function setupEventListeners(){
+    //fermeture le modal
+    document.querySelector('.close-modal').addEventListener('click', fermerModal);
+    //fermer le modal en appuyant n'importe ou
+    document.addEventListener('click', function(event){
+        if (event.target == document.getElementById('modal')) {
+            fermerModal()
+        }
+    });
+    //panier
+    document.querySelector('.panier').addEventListener('click', function(){
+        if(panier.length > 0){
+        const total = panier.reduce((tot,item) => tot + (item.prix*item.quantity), 0);
+        const totalItems = panier.reduce((tot,item) => tot + item.quantity, 0);
+        afficherNotification(`Panier: ${totalItems} articles (${total.toFixed(2)} Fcfa)`);
+        } else{
+            afficherNotification('votre panier est vide');
+        }
+    })
+}
+
+
+</script>
+</html>
